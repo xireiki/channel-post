@@ -1,0 +1,27 @@
+name: 'Channel Post'
+description: 'Push files to Telegram channel'
+author: 'xireiki'
+branding:
+  icon: 'edit'
+  color: 'white'
+inputs:
+  BOT_TOKEN:
+    description: 'Telegram Bot Token'
+    required: true
+  CHANNEL_ID:
+    description: 'Telegram Channel ID'
+    required: true
+  CONTEXT:
+    description: 'Caption'
+    required: false
+    default: ''
+  path:
+    description: 'File Path'
+    required: true
+  PARSE_MODE:
+    description: 'Parse Mode'
+    required: false
+    default: ''
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

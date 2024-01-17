@@ -21,7 +21,7 @@ function _getMediaTelegramType(path){
       return "video"
     }
   }
-  throw new Error(`Unknown media type, path: "${path}"`);
+  return "document";
 }
 
 function sendDocument(Bot, ChatId, path, {parse_mode, caption} = {}){

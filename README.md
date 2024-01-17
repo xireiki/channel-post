@@ -23,7 +23,15 @@ The following values are available:
 | Method | Description |
 | :----: | :----: |
 | sendDocument | (Default)Send File |
+| sendPhoto | Send Photo |
+| sendAudio | Send Audio |
+| sendVideo | Send Video |
 | sendMediaGroup | Send Media Files(2-10 media films)，include Document |
+
+## Outputs
+| Key | Description |
+| :----: | :----: |
+| msgId | message_id of the sent message |
 
 ## Example
 ```yml

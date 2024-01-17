@@ -26,6 +26,9 @@ inputs:
     description: 'Occurrence method, default sendDocument'
     required: false
     default: 'sendDocument'
+outpuuts:
+  msgId:
+    description: "msgid of the sent message"
 runs:
   using: 'node20'
   main: 'dist/bundle.js'

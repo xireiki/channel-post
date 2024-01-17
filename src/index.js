@@ -24,19 +24,72 @@ function _getMediaTelegramType(path){
   return "document";
 }
 
-function sendDocument(Bot, ChatId, path, {parse_mode, caption} = {}){
+function _setOutput(key, value){
+
+}
+
+function sendDocument(Bot, ChatId, path, option = {}, fileOption = {}){
   if(typeof path != "string"){
     throw new Error("Multiple files are not supported");
   }
   if(!fs.existsSync(path)){
     throw new Error(`File not found: ${path}`);
   }
-  return Bot.sendDocument(ChatId, path, {
-    caption: caption,
-    parse_mode: parse_mode
-  })
-    .then(() => {
+  return Bot.sendDocument(ChatId, path, option == {} ? undefined : option, fileOption == {} ? undefined : fileOption)
+    .then(result => {
       console.log("File sent");
+      _setOutput("msgId", result["message_id"]);
+    })
+    .catch(err => {
+      throw new Error(err.message);
+    });
+}
+
+function sendPhoto(Bot, ChatId, path, option = {}, fileOption = {}){
+  if(typeof path != "string"){
+    throw new Error("Multiple files are not supported");
+  }
+  if(!fs.existsSync(path)){
+    throw new Error(`File not found: ${path}`);
+  }
+  return Bot.sendPhoto(ChatId, path, option == {} ? undefined : option, fileOption == {} ? undefined : fileOption)
+    .then(result => {
+      console.log("Photo sent");
+      _setOutput("msgId", result["message_id"]);
+    })
+    .catch(err => {
+      throw new Error(err.message);
+    });
+}
+
+function sendAudio(Bot, ChatId, path, option = {}, fileOption = {}){
+  if(typeof path != "string"){
+    throw new Error("Multiple files are not supported");
+  }
+  if(!fs.existsSync(path)){
+    throw new Error(`File not found: ${path}`);
+  }
+  return Bot.sendAudio(ChatId, path, option == {} ? undefined : option, fileOption == {} ? undefined : fileOption)
+    .then(result => {
+      console.log("Audio sent");
+      _setOutput("msgId", result["message_id"]);
+    })
+    .catch(err => {
+      throw new Error(err.message);
+    });
+}
+
+function sendVideo(Bot, ChatId, path, option = {}, fileOption = {}){
+  if(typeof path != "string"){
+    throw new Error("Multiple files are not supported");
+  }
+  if(!fs.existsSync(path)){
+    throw new Error(`File not found: ${path}`);
+  }
+  return Bot.sendVideo(ChatId, path, option == {} ? undefined : option, fileOption == {} ? undefined : fileOption)
+    .then(result => {
+      console.log("Video sent");
+      _setOutput("msgId", result["message_id"]);
     })
     .catch(err => {
       throw new Error(err.message);
@@ -53,6 +106,13 @@ function sendMediaGroup(Bot, ChatId, media){
     }
   }
   return Bot.sendMediaGroup(ChatId, media)
+    .then(result => {
+      console.log("MediaGroup sent");
+      _setOutput("msgId", result["message_id"]);
+    })
+    .catch(err => {
+      throw new Error(err.message);
+    });
 }
 
 try {
@@ -68,6 +128,24 @@ try {
   switch(METHOD){
     case "sendDocument":
       sendDocument(Bot, CHAT_ID, path, {
+        parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
+        caption: CONTEXT === "" ? undefined : CONTEXT
+      });
+      break;
+    case "sendPhoto":
+      sendPhoto(Bot, CHAT_ID, path, {
+        parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
+        caption: CONTEXT === "" ? undefined : CONTEXT
+      });
+      break;
+    case "sendAudio":
+      sendAudio(Bot, CHAT_ID, path, {
+        parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
+        caption: CONTEXT === "" ? undefined : CONTEXT
+      });
+      break;
+    case "sendVideo":
+      sendVideo(Bot, CHAT_ID, path, {
         parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
         caption: CONTEXT === "" ? undefined : CONTEXT
       });
@@ -91,7 +169,7 @@ try {
       if(typeof CONTEXT === "string" && CONTEXT != ""){
         media[media.length - 1].caption = CONTEXT;
       }
-      Bot.sendMediaGroup(CHAT_ID, media)
+      sendMediaGroup(Bot, CHAT_ID, media)
     default:
       break;
   }

@@ -8,8 +8,8 @@ inputs:
   BOT_TOKEN:
     description: 'Telegram Bot Token'
     required: true
-  CHANNEL_ID:
-    description: 'Telegram Channel ID'
+  CHAT_ID:
+    description: 'Telegram Channel/Chat ID'
     required: true
   CONTEXT:
     description: 'Caption'
@@ -24,4 +24,4 @@ inputs:
     default: ''
 runs:
   using: 'node20'
-  main: 'dist/index.js'
+  main: 'dist/bundle.js'

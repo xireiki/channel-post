@@ -1,0 +1,35 @@
+name: Test Action
+
+on:
+  push:
+    paths-ignore:
+      - README.md
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set Post Info
+        id: set-post-info
+        run: |
+          {
+            echo 'CONTEXT<<EOF'
+            echo -e "Channel-Post\n\nWorkflow: <a href=\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\">GitHub</a>\n\ncommit: ${{ github.event.head_commit.message }}"
+            echo EOF
+          } >> $GITHUB_OUTPUT
+          echo path="$GITHUB_WORKSPACE/dist/bundle.js" >> $GITHUB_OUTPUT
+
+      - name: Post to channel
+        uses: ./
+        with: 
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          path: ${{ steps.set-post-info.outputs.path }}
+          CONTEXT: ${{ steps.set-post-info.outputs.CONTEXT }}
+          PARSE_MODE: HTML

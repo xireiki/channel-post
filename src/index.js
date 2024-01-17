@@ -5,7 +5,7 @@ const TelegramBot = require("node-telegram-bot-api");
 
 try {
   const BOT_TOKEN = core.getInput("BOT_TOKEN");
-  const CHANNEL_ID = core.getInput("CHANNEL_ID");
+  const CHAT_ID = core.getInput("CHAT_ID");
   const CONTEXT = core.getInput("CONTEXT");
   const path = core.getInput("path");
   const PARSE_MODE = core.getInput("PARSE_MODE");
@@ -17,7 +17,7 @@ try {
   if(!fs.existsSync(path)){
     throw new Error(`File not found: ${path}`);
   }
-  Bot.sendDocument(CHANNEL_ID, path, {
+  Bot.sendDocument(CHAT_ID, path, {
     caption: CONTEXT,
     parse_mode: PARSE_MODE == "" ? null : PARSE_MODE
   })

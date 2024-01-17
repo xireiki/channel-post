@@ -23,7 +23,7 @@ The following values are available:
 | Method | Description |
 | :----: | :----: |
 | sendDocument | (Default)Send File |
-| sendMediaGroup | Send Media Files(2-10 media films) |
+| sendMediaGroup | Send Media Files(2-10 media films)，include Document |
 
 ## Example
 ```yml
@@ -58,6 +58,8 @@ steps:
       path: |
         test/a.jpg
         test/b.png
+        test/c.txt
+        test/d.zip
       PARSE_MODE: Markdown
       METHOD: sendMediaGroup
 ```

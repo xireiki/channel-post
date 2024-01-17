@@ -25,7 +25,7 @@ jobs:
           } >> $GITHUB_OUTPUT
           echo path="$GITHUB_WORKSPACE/dist/bundle.js" >> $GITHUB_OUTPUT
 
-      - name: Post to channel
+      - name: Test Post Document
         uses: ./
         with: 
           CHAT_ID: ${{ secrets.CHAT_ID }}
@@ -33,3 +33,15 @@ jobs:
           path: ${{ steps.set-post-info.outputs.path }}
           CONTEXT: ${{ steps.set-post-info.outputs.CONTEXT }}
           PARSE_MODE: HTML
+
+      - name: Test Post MediaGroup
+        uses: ./
+        with: 
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          path: |
+            test/avatars.png
+            test/avatars2.png
+          CONTEXT: "**Test sendMediaGroup**"
+          PARSE_MODE: Markdown
+          METHOD: sendMediaGroup

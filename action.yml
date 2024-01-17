@@ -22,6 +22,10 @@ inputs:
     description: 'Parse Mode'
     required: false
     default: ''
+  METHOD:
+    description: 'Occurrence method, default sendDocument'
+    required: false
+    default: 'sendDocument'
 runs:
   using: 'node20'
   main: 'dist/bundle.js'

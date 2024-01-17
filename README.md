@@ -17,6 +17,14 @@ Your Post Context
 ### `PARSE_MODE`
 The following values are available: `HTML`、`Markdown` or `""`(default).
 
+### `METHOD`
+The following values are available:
+
+| Method | Description |
+| :----: | :----: |
+| sendDocument | (Default)Send File |
+| sendMediaGroup | Send Media Files(2-10 media films) |
+
 ## Example
 ```yml
 steps:
@@ -38,4 +46,18 @@ steps:
       CONTEXT: "An <i>example</i>"
       path: example.zip
       PARSE_MODE: HTML
+      METHOD: sendDocument
+
+  # example 3
+  - uses: xireiki/channel-post@v1
+    name: Post MediaGroup
+    with:
+      BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+      CHAT_ID: ${{ secrets.CHAT_ID }}
+      CONTEXT: "An **example**"
+      path: |
+        test/a.jpg
+        test/b.png
+      PARSE_MODE: Markdown
+      METHOD: sendMediaGroup
 ```

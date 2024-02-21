@@ -27,6 +27,7 @@ The following values are available:
 | sendAudio | Send Audio |
 | sendVideo | Send Video |
 | sendMediaGroup | Send Media Files(2-10 media films)，include Document |
+| sendFile | Send Files(1-10 files) |
 
 ## Outputs
 | Key | Description |
@@ -58,14 +59,23 @@ steps:
 
   # example 3
   - uses: xireiki/channel-post@v1
+    name: Post File
+    with:
+      BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+      CHAT_ID: ${{ secrets.CHAT_ID }}
+      CONTEXT: "An example"
+      path: *.zip
+      PARSE_MODE: None
+      METHOD: sendFile
+
+  # example 4
+  - uses: xireiki/channel-post@v1
     name: Post MediaGroup
     with:
       BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
       CHAT_ID: ${{ secrets.CHAT_ID }}
       CONTEXT: "An **example**"
       path: |
-        test/a.jpg
-        test/b.png
         test/c.txt
         test/d.zip
       PARSE_MODE: Markdown

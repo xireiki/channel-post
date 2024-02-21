@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - "v*"
+      - "v*.*.*"
   workflow_dispatch:
 
 jobs:
@@ -19,5 +19,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
-          body: Telegram Channel Post ${{ github.ref_name }}
+          body: |
+            Telegram Channel Post ${{ github.ref_name }}
+            ${{ github.event.head_commit.message }}
           generate_release_notes: true

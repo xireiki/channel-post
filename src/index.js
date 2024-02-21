@@ -214,6 +214,7 @@ try {
 				media[media.length - 1].caption = CONTEXT;
 			}
 			sendMediaGroup(Bot, CHAT_ID, media)
+			break;
 		case "sendFile":
 			if(path.indexOf("\n") >= 0){
 				media = [];

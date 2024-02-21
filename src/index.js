@@ -26,12 +26,12 @@ function _getMediaTelegramType(path){
 }
 
 function _setOutput(key, value){
-
+	core.setOutput(key, value);
 }
 
 function sendDocument(Bot, ChatId, path, option = {}, fileOption = {}){
-	if(typeof path != "string"){
-		throw new Error("Multiple files are not supported");
+	if(typeof path != "string" || path.indexOf("\n") >= 0){
+		throw new Error("Multiple files are not supported, use sendFile or sendMediaGroup");
 	}
 	if(!fs.existsSync(path)){
 		throw new Error(`File not found: ${path}`);
@@ -109,6 +109,17 @@ function sendMediaGroup(Bot, ChatId, media){
 	return Bot.sendMediaGroup(ChatId, media)
 		.then(result => {
 			console.log("MediaGroup sent");
+			_setOutput("msgId", result["message_id"]);
+		})
+		.catch(err => {
+			throw new Error(err.message);
+		});
+}
+
+function sendMessage(Bot, ChatId, Msg, option = {}){
+	return Bot.sendMessage(ChatId, Msg, option == {} ? undefined : option)
+		.then(result => {
+			console.log("Message sent");
 			_setOutput("msgId", result["message_id"]);
 		})
 		.catch(err => {
@@ -212,7 +223,7 @@ try {
 				}
 				for(let m in paths){
 					media.push({
-						type: _getMediaTelegramType(paths[m]),
+						type: "document",
 						media: paths[m],
 						caption: Array.isArray(CONTEXT) ? CONTEXT[m] : undefined,
 						parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
@@ -228,6 +239,11 @@ try {
 					caption: CONTEXT === "" ? undefined : CONTEXT
 				});
 			}
+			break;
+		case "sendMessage":
+			sendMessage(Bot, CHAT_ID, CONTEXT, {
+				parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE
+			});
 			break;
 		default:
 			break;

@@ -9,13 +9,13 @@ This is a Telegram Channel Post action.
 **Required**: Your Telegram Channel ID
 
 ### `CONTEXT`
-Your Post Context
+**Optional**(Except sendMessage): Your Post Context
 
 ### `path`
-**Required**: Your File Path
+**Required**(Except sendMessage): Your File Path
 
 ### `PARSE_MODE`
-The following values are available: `HTML`、`Markdown` or `""`(default).
+**Optional**: The following values are available: `HTML`, `MarkdownV2`, `Markdown` or `None`(default, None).
 
 ### `METHOD`
 The following values are available:
@@ -28,6 +28,7 @@ The following values are available:
 | sendVideo | Send Video |
 | sendMediaGroup | Send Media Files(2-10 media films)，include Document |
 | sendFile | Send Files(1-10 files) |
+| sendMessage | Send Text |
 
 ## Outputs
 | Key | Description |
@@ -54,18 +55,18 @@ steps:
       CHAT_ID: ${{ secrets.CHAT_ID }}
       CONTEXT: "An <i>example</i>"
       path: example.zip
-      PARSE_MODE: HTML
+      PARSE_MODE: HTML # Optional
       METHOD: sendDocument
 
   # example 3
   - uses: xireiki/channel-post@v1
-    name: Post File
+    name: Post Files
     with:
       BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
       CHAT_ID: ${{ secrets.CHAT_ID }}
       CONTEXT: "An example"
       path: *.zip
-      PARSE_MODE: None
+      PARSE_MODE: None # Optional
       METHOD: sendFile
 
   # example 4
@@ -78,6 +79,16 @@ steps:
       path: |
         test/c.txt
         test/d.zip
-      PARSE_MODE: Markdown
+      PARSE_MODE: Markdown # Optional
       METHOD: sendMediaGroup
+
+  # example 5
+  - uses: xireiki/channel-post@v1
+    name: Post Text
+    with:
+      BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+      CHAT_ID: ${{ secrets.CHAT_ID }}
+      CONTEXT: "An **example**"
+      PARSE_MODE: MarkdownV2 # Optional
+      METHOD: sendMessage
 ```

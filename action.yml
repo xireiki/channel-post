@@ -17,7 +17,7 @@ inputs:
     default: ''
   path:
     description: 'File Path'
-    required: true
+    required: false
   PARSE_MODE:
     description: 'Parse Mode'
     required: false

@@ -167,32 +167,42 @@ try {
 		path = getFiles(path);
 	}
 
-	console.log(path);
-
 	switch(METHOD){
 		case "sendDocument":
 			sendDocument(Bot, CHAT_ID, path, {
 				parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
 				caption: CONTEXT === "" ? undefined : CONTEXT
-			});
+			})
+				.catch(err => {
+					core.setFailed(err.message);
+				});
 			break;
 		case "sendPhoto":
 			sendPhoto(Bot, CHAT_ID, path, {
 				parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
 				caption: CONTEXT === "" ? undefined : CONTEXT
-			});
+			})
+				.catch(err => {
+					core.setFailed(err.message);
+				});
 			break;
 		case "sendAudio":
 			sendAudio(Bot, CHAT_ID, path, {
 				parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
 				caption: CONTEXT === "" ? undefined : CONTEXT
-			});
+			})
+				.catch(err => {
+					core.setFailed(err.message);
+				});
 			break;
 		case "sendVideo":
 			sendVideo(Bot, CHAT_ID, path, {
 				parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
 				caption: CONTEXT === "" ? undefined : CONTEXT
-			});
+			})
+				.catch(err => {
+					core.setFailed(err.message);
+				});
 			break;
 		case "sendMediaGroup":
 			media = [];
@@ -214,6 +224,9 @@ try {
 				media[media.length - 1].caption = CONTEXT;
 			}
 			sendMediaGroup(Bot, CHAT_ID, media)
+				.catch(err => {
+					core.setFailed(err.message);
+				});
 			break;
 		case "sendFile":
 			if(path.indexOf("\n") >= 0){
@@ -236,17 +249,26 @@ try {
 					media[media.length - 1].caption = CONTEXT;
 				}
 				sendMediaGroup(Bot, CHAT_ID, media)
+					.catch(err => {
+						core.setFailed(err.message);
+					});
 			} else {
 				sendDocument(Bot, CHAT_ID, path, {
 					parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
 					caption: CONTEXT === "" ? undefined : CONTEXT
-				});
+				})
+					.catch(err => {
+						core.setFailed(err.message);
+					});
 			}
 			break;
 		case "sendMessage":
 			sendMessage(Bot, CHAT_ID, CONTEXT, {
 				parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE
-			});
+			})
+				.catch(err => {
+					core.setFailed(err.message);
+				});
 			break;
 		default:
 			break;

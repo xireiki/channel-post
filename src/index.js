@@ -157,8 +157,10 @@ try {
 	if(path.indexOf("\n") >= 0){
 		const paths = path.split("\n");
 		for(let i = 0; i < paths.length; i += 1){
-			const finalPaths = [];
-			paths[i] = getFiles(paths[i]);
+			if(path.indexOf("*") >= 0){
+				const finalPaths = [];
+				paths[i] = getFiles(paths[i]);
+			}
 		}
 		path = paths.join("\n");
 	} else if(path.indexOf("*") >= 0){

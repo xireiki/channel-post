@@ -59,3 +59,24 @@ jobs:
           CONTEXT: "**Test sendMediaGroup 2**"
           PARSE_MODE: Markdown
           METHOD: sendMediaGroup
+
+      - name: Test Post Files
+        uses: ./
+        with: 
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          path: |
+            dist/*
+            test/*
+          CONTEXT: "**Test sendFile**"
+          PARSE_MODE: MarkdownV2
+          METHOD: sendFile
+
+      - name: Test Post Text
+        uses: ./
+        with: 
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CONTEXT: "**All tests completed**"
+          PARSE_MODE: MarkdownV2
+          METHOD: sendMessage

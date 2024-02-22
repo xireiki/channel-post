@@ -30,22 +30,22 @@ jobs:
       - name: Test Post Document
         uses: ./
         with: 
-          CHAT_ID: ${{ secrets.CHAT_ID }}
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          chat_id: ${{ secrets.CHAT_ID }}
+          bot_token: ${{ secrets.BOT_TOKEN }}
           path: ${{ steps.set-post-info.outputs.path }}
-          CONTEXT: ${{ steps.set-post-info.outputs.CONTEXT }}
-          PARSE_MODE: HTML
+          context: ${{ steps.set-post-info.outputs.CONTEXT }}
+          parse_mode: HTML
 
       - name: Test Post MediaGroup
         uses: ./
         with: 
-          CHAT_ID: ${{ secrets.CHAT_ID }}
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          chat_id: ${{ secrets.CHAT_ID }}
+          bot_token: ${{ secrets.BOT_TOKEN }}
           path: |
             test/*.png
-          CONTEXT: "**Test sendMediaGroup**"
-          PARSE_MODE: Markdown
-          METHOD: sendMediaGroup
+          context: "**Test sendMediaGroup**"
+          parse_mode: Markdown
+          method: sendMediaGroup
 
       - name: Generate large files
         run: |
@@ -54,11 +54,11 @@ jobs:
       - name: Test Post Large File
         uses: ./
         with: 
-          CHAT_ID: ${{ secrets.CHAT_ID }}
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          CONTEXT: "**All tests completed**"
-          PARSE_MODE: MarkdownV2
-          METHOD: sendFile
+          chat_id: ${{ secrets.CHAT_ID }}
+          bot_token: ${{ secrets.BOT_TOKEN }}
+          context: "**All tests completed**"
+          parse_mode: MarkdownV2
+          method: sendFile
           path: "*.img"
           large_file: true
           api_id: ${{ secrets.API_ID }}
@@ -67,8 +67,8 @@ jobs:
       - name: Test Post Text
         uses: ./
         with: 
-          CHAT_ID: ${{ secrets.CHAT_ID }}
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          CONTEXT: "**All tests completed**"
-          PARSE_MODE: MarkdownV2
-          METHOD: sendMessage
+          chat_id: ${{ secrets.CHAT_ID }}
+          bot_token: ${{ secrets.BOT_TOKEN }}
+          context: "**All tests completed**"
+          parse_mode: MarkdownV2
+          method: sendMessage

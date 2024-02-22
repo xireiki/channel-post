@@ -1,8 +1,11 @@
 const fs = require("fs");
+const os = require("os");
 const core = require("@actions/core");
 const github = require("@actions/github");
 const TelegramBot = require("node-telegram-bot-api");
 const { glob, globSync } = require('glob');
+const { exec } = require('child_process');
+const request = require("request");
 
 function _getMediaTelegramType(path){
 	const photoType = [
@@ -127,109 +130,75 @@ function sendMessage(Bot, ChatId, Msg, option = {}){
 		});
 }
 
-try {
-	const BOT_TOKEN = core.getInput("BOT_TOKEN");
-	const CHAT_ID = core.getInput("CHAT_ID");
-	const CONTEXT = core.getInput("CONTEXT");
-	let path = core.getInput("path");
-	const PARSE_MODE = core.getInput("PARSE_MODE");
-	const METHOD = core.getInput("METHOD");
-
-	const Bot = new TelegramBot(BOT_TOKEN);
-
-	function getFiles(path){
-		const finalPaths = [];
-		try {
-			fs.accessSync(path, fs.constants.F_OK);
-		} catch(err){
-			console.log(path.indexOf("*"))
-			if(path.indexOf("*") >= 0){
-				const files = globSync(path)
-				files.forEach(file => {
-					finalPaths.push(file);
-				});
-			}
+function getFiles(path){
+	const finalPaths = [];
+	try {
+		fs.accessSync(path, fs.constants.F_OK);
+	} catch(err){
+		if(path.indexOf("*") >= 0){
+			const files = globSync(path)
+			files.forEach(file => {
+				finalPaths.push(file);
+			});
 		}
-		path = finalPaths.join("\n");
-		return path;
 	}
+	path = finalPaths.join("\n");
+	return path;
+}
 
-	if(path.indexOf("\n") >= 0){
-		const paths = path.split("\n");
-		for(let i = 0; i < paths.length; i += 1){
-			if(path.indexOf("*") >= 0){
-				const finalPaths = [];
-				paths[i] = getFiles(paths[i]);
+function main(Bot){
+	return new Promise((resolve, reject) => {
+		if(path.indexOf("\n") >= 0){
+			const paths = path.split("\n");
+			for(let i = 0; i < paths.length; i += 1){
+				if(path.indexOf("*") >= 0){
+					const finalPaths = [];
+					paths[i] = getFiles(paths[i]);
+				}
 			}
+			path = paths.join("\n");
+		} else if(path.indexOf("*") >= 0){
+			path = getFiles(path);
 		}
-		path = paths.join("\n");
-	} else if(path.indexOf("*") >= 0){
-		path = getFiles(path);
-	}
-
-	switch(METHOD){
-		case "sendDocument":
-			sendDocument(Bot, CHAT_ID, path, {
-				parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
-				caption: CONTEXT === "" ? undefined : CONTEXT
-			})
-				.catch(err => {
-					core.setFailed(err.message);
-				});
-			break;
-		case "sendPhoto":
-			sendPhoto(Bot, CHAT_ID, path, {
-				parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
-				caption: CONTEXT === "" ? undefined : CONTEXT
-			})
-				.catch(err => {
-					core.setFailed(err.message);
-				});
-			break;
-		case "sendAudio":
-			sendAudio(Bot, CHAT_ID, path, {
-				parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
-				caption: CONTEXT === "" ? undefined : CONTEXT
-			})
-				.catch(err => {
-					core.setFailed(err.message);
-				});
-			break;
-		case "sendVideo":
-			sendVideo(Bot, CHAT_ID, path, {
-				parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
-				caption: CONTEXT === "" ? undefined : CONTEXT
-			})
-				.catch(err => {
-					core.setFailed(err.message);
-				});
-			break;
-		case "sendMediaGroup":
-			media = [];
-			let paths;
-			if(typeof path === "string"){
-				paths = path.split("\n");
-			} else {
-				paths = path;
-			}
-			for(let m in paths){
-				media.push({
-					type: _getMediaTelegramType(paths[m]),
-					media: paths[m],
-					caption: Array.isArray(CONTEXT) ? CONTEXT[m] : undefined,
-					parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
-				});
-			}
-			if(typeof CONTEXT === "string" && CONTEXT != ""){
-				media[media.length - 1].caption = CONTEXT;
-			}
-			sendMediaGroup(Bot, CHAT_ID, media)
-				.catch(err => {
-					core.setFailed(err.message);
-				});
-			break;
-		case "sendFile":
-			if(path.indexOf("\n") >= 0){
+		
+		switch(method){
+			case "sendDocument":
+				sendDocument(Bot, chat_id, path, {
+					parse_mode: parse_mode == "" ? undefined : parse_mode,
+					caption: context === "" ? undefined : context
+				})
+					.catch(err => {
+						core.setFailed(err.message);
+					});
+				break;
+			case "sendPhoto":
+				sendPhoto(Bot, chat_id, path, {
+					parse_mode: parse_mode == "" ? undefined : parse_mode,
+					caption: context === "" ? undefined : context
+				})
+					.catch(err => {
+						core.setFailed(err.message);
+					});
+				break;
+			case "sendAudio":
+				sendAudio(Bot, chat_id, path, {
+					parse_mode: parse_mode == "" ? undefined : parse_mode,
+					caption: context === "" ? undefined : context
+				})
+					.catch(err => {
+						core.setFailed(err.message);
+					});
+				break;
+			case "sendVideo":
+				sendVideo(Bot, chat_id, path, {
+					parse_mode: parse_mode == "" ? undefined : parse_mode,
+					caption: context === "" ? undefined : context
+				})
+					.catch(err => {
+						core.setFailed(err.message);
+					});
+				break;
+			case "sendMediaGroup":
 				media = [];
 				let paths;
 				if(typeof path === "string"){
@@ -239,40 +208,154 @@ try {
 				}
 				for(let m in paths){
 					media.push({
-						type: "document",
+						type: _getMediaTelegramType(paths[m]),
 						media: paths[m],
-						caption: Array.isArray(CONTEXT) ? CONTEXT[m] : undefined,
-						parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
+						caption: Array.isArray(context) ? context[m] : undefined,
+						parse_mode: parse_mode == "" ? undefined : parse_mode,
 					});
 				}
-				if(typeof CONTEXT === "string" && CONTEXT != ""){
-					media[media.length - 1].caption = CONTEXT;
+				if(typeof context === "string" && context != ""){
+					media[media.length - 1].caption = context;
 				}
-				sendMediaGroup(Bot, CHAT_ID, media)
+				sendMediaGroup(Bot, chat_id, media)
 					.catch(err => {
 						core.setFailed(err.message);
 					});
-			} else {
-				sendDocument(Bot, CHAT_ID, path, {
-					parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE,
-					caption: CONTEXT === "" ? undefined : CONTEXT
+				break;
+			case "sendFile":
+				if(path.indexOf("\n") >= 0){
+					media = [];
+					let paths;
+					if(typeof path === "string"){
+						paths = path.split("\n");
+					} else {
+						paths = path;
+					}
+					for(let m in paths){
+						media.push({
+							type: "document",
+							media: paths[m],
+							caption: Array.isArray(context) ? context[m] : undefined,
+							parse_mode: parse_mode == "" ? undefined : parse_mode,
+						});
+					}
+					if(typeof context === "string" && context != ""){
+						media[media.length - 1].caption = context;
+					}
+					sendMediaGroup(Bot, chat_id, media)
+						.catch(err => {
+							core.setFailed(err.message);
+						});
+				} else {
+					sendDocument(Bot, chat_id, path, {
+						parse_mode: parse_mode == "" ? undefined : parse_mode,
+						caption: context === "" ? undefined : context
+					})
+						.catch(err => {
+							core.setFailed(err.message);
+						});
+				}
+				break;
+			case "sendMessage":
+				sendMessage(Bot, chat_id, context, {
+					parse_mode: parse_mode == "" ? undefined : parse_mode
 				})
 					.catch(err => {
 						core.setFailed(err.message);
 					});
-			}
-			break;
-		case "sendMessage":
-			sendMessage(Bot, CHAT_ID, CONTEXT, {
-				parse_mode: PARSE_MODE == "" ? undefined : PARSE_MODE
-			})
-				.catch(err => {
-					core.setFailed(err.message);
-				});
-			break;
-		default:
-			break;
+				break;
+		}
+	});
+}
+
+const bot_token = core.getInput("bot_token");
+const chat_id = core.getInput("chat_id");
+const context = core.getInput("context");
+let path = core.getInput("path");
+const parse_mode = core.getInput("parse_mode");
+const method = core.getInput("method");
+const large_file = core.getInput("large_file");
+const api_id = core.getInput("api_id");
+const api_hash = core.getInput("api_hash");
+
+if(!bot_token){
+	core.setFailed("bot_token cannot be empty");
+	process.exit();
+}
+if(!chat_id){
+	core.setFailed("chat_id cannot be empty");
+	process.exit();
+}
+if(!method){
+	core.setFailed("method cannot be empty");
+	process.exit();
+}
+if(method == "sendMessage"){
+	if(!context){
+		core.setFailed("context cannot be empty");
+		process.exit();
 	}
-} catch(err) {
-	core.setFailed(err.message);
+} else {
+	if(!path){
+		core.setFailed("path cannot be empty");
+		process.exit();
+	}
+}
+
+if(large_file == true || large_file == "true"){
+	if(!api_id){
+		core.setFailed("api_id cannot be empty");
+		process.exit();
+	}
+	if(!api_hash){
+		core.setFailed("api_hash cannot be empty");
+		process.exit();
+	}
+	const arch = os.arch();
+	if(arch != "x86_64" && arch != "amd64" && arch != "x86-64" && arch != "x64"){
+		core.setFailed("only x86_64 is now supported for large_file. Does not support " + os.arch());
+		process.exit();
+	}
+	let downloadUrl;
+	let fileName = "telegram-bot-api";
+	if(process.platform == "linux"){
+		downloadUrl = "https://github.com/xireiki/telegram-bot-api-build/releases/download/telegram-bot-api/telegram-bot-api_linux_x86-64";
+	} else if(process.platform == "darwin"){
+		downloadUrl = "https://github.com/xireiki/telegram-bot-api-build/releases/download/telegram-bot-api/telegram-bot-api_darwin_x86-64";
+	} else if(process.platform == "win32"){
+		downloadUrl = "https://github.com/xireiki/telegram-bot-api-build/releases/download/telegram-bot-api/telegram-bot-api_win_x86-64.exe";
+		fileName = "telegram-bot-api.exe";
+	} else {
+		core.setFailed("Unsupported system architecture: " + process.platform);
+		process.exit();
+	}
+	const file = fs.createWriteStream("telegram-bot-api");
+	request(downloadUrl)
+		.pipe(file)
+		.on("finish", () => {
+			file.close();
+			const child = exec(`sleep 3 && chmod +x ${fileName} && ./${fileName} --api-id=${api_id} --api-hash=${api_hash} --local`, err => {
+				if(err){
+					core.setFailed(err.message);
+					process.exit();
+				}
+			});
+			child.on('exit', () => {
+				child.kill();
+			});
+			setTimeout(() => {
+				const Bot = new TelegramBot(bot_token, {baseApiUrl: "http://127.0.0.1:8081"});
+				main(Bot).then(() => child.kill("SIGINT")).catch(err => {
+					core.setFailed(err.message);
+					process.exit();
+				});
+			}, 5000);
+		})
+		.on("error", err => core.setFailed(err.message));
+} else {
+	const Bot = new TelegramBot(bot_token);
+	main(Bot).catch(err => {
+		core.setFailed(err.message);
+		process.exit();
+	});
 }

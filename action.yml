@@ -5,27 +5,37 @@ branding:
   icon: 'edit'
   color: 'white'
 inputs:
-  BOT_TOKEN:
+  bot_token:
     description: 'Telegram Bot Token'
     required: true
-  CHAT_ID:
+  chat_id:
     description: 'Telegram Channel/Chat ID'
     required: true
-  CONTEXT:
+  context:
     description: 'Caption'
     required: false
     default: ''
   path:
     description: 'File Path'
     required: false
-  PARSE_MODE:
+  parse_mode:
     description: 'Parse Mode'
     required: false
     default: ''
-  METHOD:
+  method:
     description: 'Occurrence method, default sendDocument'
     required: false
     default: 'sendDocument'
+  large_file:
+    description: 'Enable large file support, api_id and api_hash are required after enabling'
+    required: false
+    default: false
+  api_id:
+    description: 'Telegram Developer api_id'
+    required: false
+  api_hash:
+    description: 'Telegram Developer api_hash'
+    required: false
 outpuuts:
   msgId:
     description: "msgid of the sent message"

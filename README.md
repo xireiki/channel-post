@@ -2,22 +2,22 @@
 This is a Telegram Channel Post action.
 
 ## Inputs
-### `BOT_API`
+### `bot_api`
 **Required**: Your Telegram Bot API
 
-### `CHAT_ID`
+### `chat_id`
 **Required**: Your Telegram Channel ID
 
-### `CONTEXT`
+### `context`
 **Optional**(Except sendMessage): Your Post Context
 
 ### `path`
 **Required**(Except sendMessage): Your File Path
 
-### `PARSE_MODE`
+### `parse_mode`
 **Optional**: The following values are available: `HTML`, `MarkdownV2`, `Markdown` or `None`(default, None).
 
-### `METHOD`
+### `method`
 The following values are available:
 
 | Method | Description |
@@ -29,6 +29,15 @@ The following values are available:
 | sendMediaGroup | Send Media Files(2-10 media films)，include Document |
 | sendFile | Send Files(1-10 files) |
 | sendMessage | Send Text |
+
+### `large_file`
+**Optional**: Enable large file support, api_id and api_hash are required after enabling
+
+### `api_id`
+**Optional**(Except when large_file is true): Telegram Developer api_id
+
+### `api_hash`
+**Optional**(Except when large_file is true): Telegram Developer api_hash
 
 ## Outputs
 | Key | Description |

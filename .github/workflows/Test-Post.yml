@@ -42,35 +42,27 @@ jobs:
           CHAT_ID: ${{ secrets.CHAT_ID }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           path: |
-            test/avatars.png
-            test/avatars2.png
+            test/*.png
           CONTEXT: "**Test sendMediaGroup**"
           PARSE_MODE: Markdown
           METHOD: sendMediaGroup
 
-      - name: Test Post MediaGroup 2
-        uses: ./
-        with: 
-          CHAT_ID: ${{ secrets.CHAT_ID }}
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          path: |
-            dist/bundle.js
-            dist/bundle.js.LICENSE.txt
-          CONTEXT: "**Test sendMediaGroup 2**"
-          PARSE_MODE: Markdown
-          METHOD: sendMediaGroup
+      - name: Generate large files
+        run: |
+          dd if=/dev/zero of=largefile.img bs=1024k count=55
 
-      - name: Test Post Files
+      - name: Test Post Large File
         uses: ./
         with: 
           CHAT_ID: ${{ secrets.CHAT_ID }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          path: |
-            dist/*
-            test/*
-          CONTEXT: "**Test sendFile**"
+          CONTEXT: "**All tests completed**"
           PARSE_MODE: MarkdownV2
           METHOD: sendFile
+          path: "*.img"
+          large_file: true
+          api_id: ${{ secrets.API_ID }}
+          api_hash: ${{ secrets.API_HASH }}
 
       - name: Test Post Text
         uses: ./

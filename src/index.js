@@ -167,8 +167,12 @@ function main(Bot){
 					parse_mode: parse_mode == "" ? undefined : parse_mode,
 					caption: context === "" ? undefined : context
 				})
+					.then(() => {
+						resolve();
+					})
 					.catch(err => {
 						core.setFailed(err.message);
+						reject();
 					});
 				break;
 			case "sendPhoto":
@@ -176,8 +180,12 @@ function main(Bot){
 					parse_mode: parse_mode == "" ? undefined : parse_mode,
 					caption: context === "" ? undefined : context
 				})
+					.then(() => {
+						resolve();
+					})
 					.catch(err => {
 						core.setFailed(err.message);
+						reject();
 					});
 				break;
 			case "sendAudio":
@@ -185,8 +193,12 @@ function main(Bot){
 					parse_mode: parse_mode == "" ? undefined : parse_mode,
 					caption: context === "" ? undefined : context
 				})
+					.then(() => {
+						resolve();
+					})
 					.catch(err => {
 						core.setFailed(err.message);
+						reject();
 					});
 				break;
 			case "sendVideo":
@@ -194,8 +206,12 @@ function main(Bot){
 					parse_mode: parse_mode == "" ? undefined : parse_mode,
 					caption: context === "" ? undefined : context
 				})
+					.then(() => {
+						resolve();
+					})
 					.catch(err => {
 						core.setFailed(err.message);
+						reject();
 					});
 				break;
 			case "sendMediaGroup":
@@ -218,8 +234,12 @@ function main(Bot){
 					media[media.length - 1].caption = context;
 				}
 				sendMediaGroup(Bot, chat_id, media)
+					.then(() => {
+						resolve();
+					})
 					.catch(err => {
 						core.setFailed(err.message);
+						reject();
 					});
 				break;
 			case "sendFile":
@@ -243,16 +263,24 @@ function main(Bot){
 						media[media.length - 1].caption = context;
 					}
 					sendMediaGroup(Bot, chat_id, media)
+						.then(() => {
+							resolve();
+						})
 						.catch(err => {
 							core.setFailed(err.message);
+							reject();
 						});
 				} else {
 					sendDocument(Bot, chat_id, path, {
 						parse_mode: parse_mode == "" ? undefined : parse_mode,
 						caption: context === "" ? undefined : context
 					})
+						.then(() => {
+							resolve();
+						})
 						.catch(err => {
 							core.setFailed(err.message);
+							reject();
 						});
 				}
 				break;
@@ -260,8 +288,12 @@ function main(Bot){
 				sendMessage(Bot, chat_id, context, {
 					parse_mode: parse_mode == "" ? undefined : parse_mode
 				})
+					.then(() => {
+						resolve();
+					})
 					.catch(err => {
 						core.setFailed(err.message);
+						reject();
 					});
 				break;
 		}
@@ -345,7 +377,10 @@ if(large_file == true || large_file == "true"){
 			});
 			setTimeout(() => {
 				const Bot = new TelegramBot(bot_token, {baseApiUrl: "http://127.0.0.1:8081"});
-				main(Bot).then(() => child.kill("SIGINT")).catch(err => {
+				main(Bot).then(() => {
+					child.kill("SIGINT");
+					process.exit();
+				}).catch(err => {
 					core.setFailed(err.message);
 					process.exit();
 				});
@@ -354,7 +389,9 @@ if(large_file == true || large_file == "true"){
 		.on("error", err => core.setFailed(err.message));
 } else {
 	const Bot = new TelegramBot(bot_token);
-	main(Bot).catch(err => {
+	main(Bot).then(() => {
+		process.exit();
+	}).catch(err => {
 		core.setFailed(err.message);
 		process.exit();
 	});

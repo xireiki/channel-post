@@ -15,7 +15,9 @@ This is a Telegram Channel Post action.
 **Required**(Except sendMessage): Your File Path
 
 ### `parse_mode`
-**Optional**: The following values are available: `HTML`, `MarkdownV2`, `Markdown` or `None`(default, None).
+**Optional**: The following values are available: `HTML`, `MarkdownV2`, `Markdown` or `None`(default, None). 
+
+The syntax of `MarkdownV2` is different from that of regular `Markdown`. Please check the [Telegram Bot Api](https://core.telegram.org/bots/api#markdownv2-style) documentation. 
 
 ### `method`
 The following values are available:
@@ -97,7 +99,7 @@ steps:
     with:
       bot_token: ${{ secrets.BOT_TOKEN }}
       chat_id: ${{ secrets.CHAT_ID }}
-      context: "An **example**"
+      context: "An *example*"
       parse_mode: MarkdownV2 # Optional
       method: sendMessage
 ```

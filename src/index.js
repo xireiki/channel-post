@@ -146,6 +146,14 @@ function getFiles(path){
 	return path;
 }
 
+function sleep(time){
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve();
+		}, time);
+	});
+}
+
 function main(Bot){
 	return new Promise((resolve, reject) => {
 		if(path.indexOf("\n") >= 0){
@@ -342,6 +350,7 @@ if(large_file == true || large_file == "true"){
 	}
 	let downloadUrl;
 	let fileName = "telegram-bot-api";
+	let run_cmd = `chmod +x ${fileName} && ./${fileName} --api-id=${api_id} --api-hash=${api_hash} --local`;
 	if(process.platform == "linux"){
 		downloadUrl = "https://github.com/xireiki/telegram-bot-api-build/releases/download/telegram-bot-api/telegram-bot-api_linux_x86-64";
 	} else if(process.platform == "darwin"){
@@ -349,34 +358,37 @@ if(large_file == true || large_file == "true"){
 	} else if(process.platform == "win32"){
 		downloadUrl = "https://github.com/xireiki/telegram-bot-api-build/releases/download/telegram-bot-api/telegram-bot-api_win_x86-64.exe";
 		fileName = "telegram-bot-api.exe";
+		run_cmd = `.\\${fileName} --api-id=${api_id} --api-hash=${api_hash} --local`;
 	} else {
 		core.setFailed("Unsupported system architecture: " + process.platform);
 		process.exit();
 	}
-	const file = fs.createWriteStream("telegram-bot-api");
+	const file = fs.createWriteStream(fileName);
 	request(downloadUrl)
 		.pipe(file)
 		.on("finish", () => {
 			file.close();
-			const child = exec(`sleep 3 && chmod +x ${fileName} && ./${fileName} --api-id=${api_id} --api-hash=${api_hash} --local`, err => {
-				if(err){
-					core.setFailed(err.message || err);
-					process.exit();
-				}
-			});
-			child.on('exit', () => {
-				child.kill();
-			});
-			setTimeout(() => {
-				const Bot = new TelegramBot(bot_token, {baseApiUrl: "http://127.0.0.1:8081"});
-				main(Bot).then(() => {
-					child.kill("SIGINT");
-					process.exit();
-				}).catch(err => {
-					core.setFailed(err.message);
-					process.exit();
+			sleep(3000).then(() => {
+				const child = exec(run_cmd, err => {
+					if(err){
+						core.setFailed(err.message);
+						process.exit();
+					}
 				});
-			}, 5000);
+				child.on('exit', () => {
+					child.kill();
+				});
+				setTimeout(() => {
+					const Bot = new TelegramBot(bot_token, {baseApiUrl: "http://127.0.0.1:8081"});
+					main(Bot).then(() => {
+						child.kill("SIGINT");
+						process.exit();
+					}).catch(err => {
+						core.setFailed(err.message);
+						process.exit();
+					});
+				}, 5000);
+			});
 		})
 		.on("error", err => core.setFailed(err.message));
 } else {

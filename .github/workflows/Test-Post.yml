@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test_linux:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -57,7 +57,7 @@ jobs:
         with: 
           chat_id: ${{ secrets.CHAT_ID }}
           bot_token: ${{ secrets.BOT_TOKEN }}
-          context: "**All tests completed**"
+          context: "*Test Post Large File*"
           parse_mode: MarkdownV2
           method: sendFile
           path: "*.img"
@@ -73,3 +73,56 @@ jobs:
           context: "**All tests completed**"
           parse_mode: MarkdownV2
           method: sendMessage
+
+  test_darwin:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate large files
+        run: |
+          dd if=/dev/zero of=largefile.img bs=1024k count=55
+
+      - name: Test Post Large File
+        uses: ./
+        with: 
+          chat_id: ${{ secrets.CHAT_ID }}
+          bot_token: ${{ secrets.BOT_TOKEN }}
+          context: "*Test Post Large File*"
+          parse_mode: MarkdownV2
+          method: sendFile
+          path: "*.img"
+          large_file: true
+          api_id: ${{ secrets.API_ID }}
+          api_hash: ${{ secrets.API_HASH }}
+
+  test_windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate large files
+        run: |
+          fsutil file createnew largefile.img 57671680
+
+      - name: Dir
+        run: ls
+
+      - name: Test Post Large File
+        uses: ./
+        with: 
+          chat_id: ${{ secrets.CHAT_ID }}
+          bot_token: ${{ secrets.BOT_TOKEN }}
+          context: "*Test Post Large File*"
+          parse_mode: MarkdownV2
+          method: sendFile
+          path: "*.img"
+          large_file: true
+          api_id: ${{ secrets.API_ID }}
+          api_hash: ${{ secrets.API_HASH }}

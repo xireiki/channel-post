@@ -171,8 +171,7 @@ function main(Bot){
 						resolve();
 					})
 					.catch(err => {
-						core.setFailed(err.message);
-						reject();
+						reject(err);
 					});
 				break;
 			case "sendPhoto":
@@ -184,8 +183,7 @@ function main(Bot){
 						resolve();
 					})
 					.catch(err => {
-						core.setFailed(err.message);
-						reject();
+						reject(err);
 					});
 				break;
 			case "sendAudio":
@@ -197,8 +195,7 @@ function main(Bot){
 						resolve();
 					})
 					.catch(err => {
-						core.setFailed(err.message);
-						reject();
+						reject(err);
 					});
 				break;
 			case "sendVideo":
@@ -210,8 +207,7 @@ function main(Bot){
 						resolve();
 					})
 					.catch(err => {
-						core.setFailed(err.message);
-						reject();
+						reject(err);
 					});
 				break;
 			case "sendMediaGroup":
@@ -238,8 +234,7 @@ function main(Bot){
 						resolve();
 					})
 					.catch(err => {
-						core.setFailed(err.message);
-						reject();
+						reject(err);
 					});
 				break;
 			case "sendFile":
@@ -267,8 +262,7 @@ function main(Bot){
 							resolve();
 						})
 						.catch(err => {
-							core.setFailed(err.message);
-							reject();
+							reject(err);
 						});
 				} else {
 					sendDocument(Bot, chat_id, path, {
@@ -279,8 +273,7 @@ function main(Bot){
 							resolve();
 						})
 						.catch(err => {
-							core.setFailed(err.message);
-							reject();
+							reject(err);
 						});
 				}
 				break;
@@ -292,8 +285,7 @@ function main(Bot){
 						resolve();
 					})
 					.catch(err => {
-						core.setFailed(err.message);
-						reject();
+						reject(err);
 					});
 				break;
 		}
@@ -368,7 +360,7 @@ if(large_file == true || large_file == "true"){
 			file.close();
 			const child = exec(`sleep 3 && chmod +x ${fileName} && ./${fileName} --api-id=${api_id} --api-hash=${api_hash} --local`, err => {
 				if(err){
-					core.setFailed(err.message);
+					core.setFailed(err.message || err);
 					process.exit();
 				}
 			});

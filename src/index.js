@@ -309,6 +309,9 @@ const method = core.getInput("method");
 const large_file = core.getInput("large_file");
 const api_id = core.getInput("api_id");
 const api_hash = core.getInput("api_hash");
+const api_server = core.getInput("api_server");
+const runCommand = core.getInput("run_cmd");
+const CustomFileName = core.getInput("api_server_file_name");
 
 if(!bot_token){
 	core.setFailed("bot_token cannot be empty");
@@ -344,21 +347,29 @@ if(large_file == true || large_file == "true"){
 		process.exit();
 	}
 	const arch = os.arch();
-	if(arch != "x86_64" && arch != "amd64" && arch != "x86-64" && arch != "x64"){
+	if(arch != "x86_64" && arch != "amd64" && arch != "x86-64" && arch != "x64" && !api_server){
 		core.setFailed("only x86_64 is now supported for large_file. Does not support " + os.arch());
 		process.exit();
 	}
 	let downloadUrl;
 	let fileName = "telegram-bot-api";
 	let run_cmd = `chmod +x ${fileName} && ./${fileName} --api-id=${api_id} --api-hash=${api_hash} --local`;
-	if(process.platform == "linux"){
+	if(process.platform == "linux" && !api_server){
 		downloadUrl = "https://github.com/xireiki/telegram-bot-api-build/releases/download/telegram-bot-api/telegram-bot-api_linux_x86-64";
-	} else if(process.platform == "darwin"){
+	} else if(process.platform == "darwin" && !api_server){
 		downloadUrl = "https://github.com/xireiki/telegram-bot-api-build/releases/download/telegram-bot-api/telegram-bot-api_darwin_x86-64";
-	} else if(process.platform == "win32"){
+	} else if(process.platform == "win32" && !api_server){
 		downloadUrl = "https://github.com/xireiki/telegram-bot-api-build/releases/download/telegram-bot-api/telegram-bot-api_win_x86-64.exe";
 		fileName = "telegram-bot-api.exe";
 		run_cmd = `.\\${fileName} --api-id=${api_id} --api-hash=${api_hash} --local`;
+	} else if(api_server){
+		downloadUrl = api_server;
+		if(CustomFileName){
+			fileName = CustomFileName;
+		}
+		if(runCommand){
+			run_cmd = runCommand.replace("{api_id}", api_id).replace("{api_hash}", api_hash).replace("{fileName}", fileName);
+		}
 	} else {
 		core.setFailed("Unsupported system architecture: " + process.platform);
 		process.exit();

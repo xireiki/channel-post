@@ -111,9 +111,6 @@ jobs:
         run: |
           fsutil file createnew largefile.img 57671680
 
-      - name: Dir
-        run: ls
-
       - name: Test Post Large File
         uses: ./
         with: 

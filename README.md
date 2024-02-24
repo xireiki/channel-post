@@ -2,14 +2,14 @@
 This is a Telegram Channel Post action.
 
 ## Inputs
-### `bot_api`
-**Required**: Your Telegram Bot API
+### `bot_token`
+**Required**: Your Telegram Bot API Token.
 
 ### `chat_id`
-**Required**: Your Telegram Channel ID
+**Required**: Your Telegram Chat ID(Like channel)
 
 ### `topic_id`
-**Required**: Topic ID. Can be used to send messages on a specific topic, not in #General
+**Optional**: Topic ID. Can be used to send messages on a specific topic, not in #General
 
 ### `context`
 **Optional**(Except sendMessage): Your Post Context

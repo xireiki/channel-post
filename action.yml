@@ -45,6 +45,9 @@ inputs:
   api_server_file_name:
     description: 'The filename of the custom telegram-bot-api will replace `${fileName}` in run_cmd'
     required: false
+  topic_id:
+    description: 'The ID of the super group subtopic'
+    required: false
 outpuuts:
   msgId:
     description: "msgid of the sent message"

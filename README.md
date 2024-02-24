@@ -8,6 +8,9 @@ This is a Telegram Channel Post action.
 ### `chat_id`
 **Required**: Your Telegram Channel ID
 
+### `topic_id`
+**Required**: Topic ID. Can be used to send messages on a specific topic, not in #General
+
 ### `context`
 **Optional**(Except sendMessage): Your Post Context
 

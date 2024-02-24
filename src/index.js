@@ -173,7 +173,8 @@ function main(Bot){
 			case "sendDocument":
 				sendDocument(Bot, chat_id, path, {
 					parse_mode: parse_mode == "" ? undefined : parse_mode,
-					caption: context === "" ? undefined : context
+					caption: context === "" ? undefined : context,
+					message_thread_id: topic_id === "" ? undefined : topic_id
 				})
 					.then(() => {
 						resolve();
@@ -185,7 +186,8 @@ function main(Bot){
 			case "sendPhoto":
 				sendPhoto(Bot, chat_id, path, {
 					parse_mode: parse_mode == "" ? undefined : parse_mode,
-					caption: context === "" ? undefined : context
+					caption: context === "" ? undefined : context,
+					message_thread_id: topic_id === "" ? undefined : topic_id
 				})
 					.then(() => {
 						resolve();
@@ -197,7 +199,8 @@ function main(Bot){
 			case "sendAudio":
 				sendAudio(Bot, chat_id, path, {
 					parse_mode: parse_mode == "" ? undefined : parse_mode,
-					caption: context === "" ? undefined : context
+					caption: context === "" ? undefined : context,
+					message_thread_id: topic_id === "" ? undefined : topic_id
 				})
 					.then(() => {
 						resolve();
@@ -209,7 +212,8 @@ function main(Bot){
 			case "sendVideo":
 				sendVideo(Bot, chat_id, path, {
 					parse_mode: parse_mode == "" ? undefined : parse_mode,
-					caption: context === "" ? undefined : context
+					caption: context === "" ? undefined : context,
+					message_thread_id: topic_id === "" ? undefined : topic_id
 				})
 					.then(() => {
 						resolve();
@@ -237,7 +241,9 @@ function main(Bot){
 				if(typeof context === "string" && context != ""){
 					media[media.length - 1].caption = context;
 				}
-				sendMediaGroup(Bot, chat_id, media)
+				sendMediaGroup(Bot, chat_id, media, {
+					message_thread_id: topic_id === "" ? undefined : topic_id
+				})
 					.then(() => {
 						resolve();
 					})
@@ -265,7 +271,9 @@ function main(Bot){
 					if(typeof context === "string" && context != ""){
 						media[media.length - 1].caption = context;
 					}
-					sendMediaGroup(Bot, chat_id, media)
+					sendMediaGroup(Bot, chat_id, media, {
+						message_thread_id: topic_id === "" ? undefined : topic_id
+					})
 						.then(() => {
 							resolve();
 						})
@@ -275,7 +283,8 @@ function main(Bot){
 				} else {
 					sendDocument(Bot, chat_id, path, {
 						parse_mode: parse_mode == "" ? undefined : parse_mode,
-						caption: context === "" ? undefined : context
+						caption: context === "" ? undefined : context,
+						message_thread_id: topic_id === "" ? undefined : topic_id
 					})
 						.then(() => {
 							resolve();
@@ -287,7 +296,8 @@ function main(Bot){
 				break;
 			case "sendMessage":
 				sendMessage(Bot, chat_id, context, {
-					parse_mode: parse_mode == "" ? undefined : parse_mode
+					parse_mode: parse_mode == "" ? undefined : parse_mode,
+					message_thread_id: topic_id === "" ? undefined : topic_id
 				})
 					.then(() => {
 						resolve();
@@ -312,6 +322,7 @@ const api_hash = core.getInput("api_hash");
 const api_server = core.getInput("api_server");
 const runCommand = core.getInput("run_cmd");
 const CustomFileName = core.getInput("api_server_file_name");
+const topic_id = core.getInput("topic_id");
 
 if(!bot_token){
 	core.setFailed("bot_token cannot be empty");

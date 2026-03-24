@@ -1,5 +1,5 @@
 name: 'Channel Post'
-description: 'Push files to Telegram channel'
+description: 'Push files to Telegram channel with session caching'
 author: 'xireiki'
 branding:
   icon: 'edit'
@@ -41,9 +41,15 @@ inputs:
   topic_id:
     description: 'The ID of the super group subtopic'
     required: false
+  cache_session:
+    description: 'Enable session caching to avoid repeated logins'
+    required: false
+    default: 'true'
+
 outputs:
   msgId:
     description: "msgid of the sent message"
+
 runs:
   using: 'node20'
   main: 'dist/bundle.js'

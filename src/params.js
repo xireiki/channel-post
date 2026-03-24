@@ -11,6 +11,7 @@ export function getParams() {
     let api_id = core.getInput("api_id");
     const api_hash = core.getInput("api_hash");
     const topic_id = core.getInput("topic_id");
+    let cache_session = core.getInput("cache_session");
 
     if (!bot_token) {
         core.setFailed("bot_token cannot be empty");
@@ -49,6 +50,12 @@ export function getParams() {
             process.exit();
         }
     }
+    // 处理 cache_session 布尔值
+    if (cache_session === false || cache_session === "false") {
+        cache_session = false;
+    } else {
+        cache_session = true;
+    }
     return {
         bot_token,
         chat_id,
@@ -59,6 +66,7 @@ export function getParams() {
         large_file,
         api_id,
         api_hash,
-        topic_id
+        topic_id,
+        cache_session
     };
 }

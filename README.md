@@ -44,24 +44,8 @@ The following values are available:
 ### `api_hash`
 **Optional**(Except when large_file is true): Telegram Developer api_hash
 
-### `apt_server`
-**Optional**: Customize the download address of the compiled [telegram-bot-api](https://github.com/tdlib/telegram-bot-api) binary file.
-
-Valid only if large_file is true
-
-Currently only Linux, MacOS and Windows with non-x86_64 architecture are required.
-
-**Warning**: Once this input is set, system architecture and platform limitations are ignored
-
-### `api_server_file_name`
-**Optional**: The filename of the custom telegram-bot-api will replace `${fileName}` in run_cmd
-
-Note that this value is only valid if you customize api_server
-
-### `run_cmd`
-**Optional**: Command to start telegram-bot-api, default `chmod +x ${fileName} && ./${fileName} --api-id=${api_id} --api-hash=${api_hash} --local`
-
-Note that this value is only valid if you customize api_server
+### `cache_session`
+**Optional**: Save robot session files, default is false.
 
 ## Outputs
 | Key | Description |

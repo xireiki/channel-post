@@ -33,22 +33,15 @@ inputs:
   api_id:
     description: 'Telegram Developer api_id'
     required: false
+    default: -1
   api_hash:
     description: 'Telegram Developer api_hash'
     required: false
-  api_server:
-    description: 'Customize the download address of the compiled [telegram-bot-api](https://github.com/tdlib/telegram-bot-api) binary file'
-    required: false
-  run_cmd:
-    description: 'Command to start telegram-bot-api'
-    required: false
-  api_server_file_name:
-    description: 'The filename of the custom telegram-bot-api will replace `${fileName}` in run_cmd'
-    required: false
+    default: ''
   topic_id:
     description: 'The ID of the super group subtopic'
     required: false
-outpuuts:
+outputs:
   msgId:
     description: "msgid of the sent message"
 runs:

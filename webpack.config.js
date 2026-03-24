@@ -9,7 +9,21 @@ export default {
 	entry: './src/index.js',
 	output: {
 		path: path.resolve(__dirname, 'dist'),
-		filename: 'bundle.js'
+		filename: 'bundle.js',
+		library: {
+			type: 'module'
+		},
+		chunkFormat: 'module'
+	},
+	mode: 'production',
+	optimization: {
+		minimize: false
+	},
+	experiments: {
+		outputModule: true
+	},
+	externalsPresets: {
+		node: true
 	},
 	module: {
 		rules: [{
@@ -18,9 +32,14 @@ export default {
 			use: {
 				loader: 'babel-loader',
 				options: {
-					presets: ['@babel/preset-env']
+					presets: [['@babel/preset-env', { 
+						targets: { node: '20' },
+						useBuiltIns: false,
+						modules: false
+					}]]
 				}
 			}
 		}]
-	}
+	},
+	externals: []
 };

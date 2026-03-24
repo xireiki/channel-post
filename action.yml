@@ -33,7 +33,7 @@ inputs:
   api_id:
     description: 'Telegram Developer api_id'
     required: false
-    default: -1
+    default: ''
   api_hash:
     description: 'Telegram Developer api_hash'
     required: false
@@ -44,7 +44,7 @@ inputs:
   cache_session:
     description: 'Enable session caching to avoid repeated logins'
     required: false
-    default: 'true'
+    default: true
 
 outputs:
   msgId:

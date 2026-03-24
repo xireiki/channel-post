@@ -39,7 +39,7 @@ export function getParams() {
 
     if (large_file === true || large_file === "true") {
         large_file = true;
-        if (!api_id || api_id === -1) {
+        if (!api_id || api_id <= 0) {
             core.setFailed("api_id cannot be empty");
             process.exit();
         } else {
@@ -49,6 +49,8 @@ export function getParams() {
             core.setFailed("api_hash cannot be empty");
             process.exit();
         }
+    } else {
+        large_file = false;
     }
     // 处理 cache_session 布尔值
     if (cache_session === false || cache_session === "false") {

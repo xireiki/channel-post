@@ -20,9 +20,7 @@ async function restoreSessionCache() {
 		console.log(`Attempting to restore cache with key: ${CACHE_KEY}`);
 		const restoredKey = await cache.restoreCache(CACHE_PATH, CACHE_KEY);
 		if (restoredKey) {
-			console.log(`Successfully restored cache with key: ${CACHE_KEY}`);
-		} else {
-			console.log("No cache found, will create new session");
+			console.log(`Successfully restored cache`);
 		}
 	} catch (err) {
 		console.warn("Failed to restore cache:", err.message);
@@ -30,8 +28,8 @@ async function restoreSessionCache() {
 }
 
 async function saveSessionCache() {
-	if (!cache_session) {
-		console.log("Session caching disabled");
+	if (!cache_session || !fs.existsSync("bot.session")) {
+		console.log("Session caching disabled or bot.session not found, skipping cache save");
 		return;
 	}
 	try {
@@ -39,8 +37,6 @@ async function saveSessionCache() {
 			console.log(`Saving cache with key: ${CACHE_KEY}`);
 			await cache.saveCache(CACHE_PATH, CACHE_KEY);
 			console.log("Cache saved successfully");
-		} else {
-			console.log("bot.session file not found, skipping cache save");
 		}
 	} catch (err) {
 		console.warn("Failed to save cache:", err.message);
@@ -170,7 +166,7 @@ const client = new postClient(bot_token, api_id, api_hash, large_file);
 		await saveSessionCache();
 
 	} catch (err) {
-		console.error("Error:", err);
+		console.error("Error:", err.message);
 		process.exit(1);
 	} finally {
 		client.close();

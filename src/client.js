@@ -31,24 +31,30 @@ async function myTelegramClient(api_id, api_hash, bot_token) {
 class postClient {
     constructor(bot_token, api_id = null, api_hash = null, useProto = false) {
         this.bot_token = bot_token;
-        this.api_id = api_id;
-        this.api_hash = api_hash;
+        if (api_id && api_id > 0 && api_id !== "") {
+            this.api_id = api_id;
+        } else {
+            this.api_id = null;
+        }
+        if (api_hash && api_hash !== "") {
+            this.api_hash = api_hash;
+        } else {
+            this.api_hash = null;
+        }
         this.useProto = useProto;
     }
 
     async init() {
-        if (!this.useProto) {
+        if (!this.useProto) { // 使用 node-telegram-bot-api
             console.log("Using TelegramBot");
             this.client = new TelegramBot(this.bot_token);
-        } else if (this.api_id && this.api_hash) {
+        } else { // 使用 teleproto 的 TelegramClient
             console.log("Using TelegramClient");
             try {
                 this.client = await myTelegramClient(this.api_id, this.api_hash, this.bot_token);
             } catch (err) {
                 throw new Error(`Failed to initialize TelegramClient: ${err.message}`);
             }
-        } else {
-            throw new Error("api_id and api_hash are required for TelegramClient (\"large_file\" = true)");
         }
     }
 

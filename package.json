@@ -1,6 +1,6 @@
 {
   "name": "channel-post",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Telegram Chennel/Chat Post",
   "main": "index.js",
   "target": "es2020",

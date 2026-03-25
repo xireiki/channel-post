@@ -1,4 +1,4 @@
-import core from "@actions/core";
+import * as core from "@actions/core";
 
 export function getParams() {
     const bot_token = core.getInput("bot_token");

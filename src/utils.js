@@ -1,7 +1,7 @@
 import fs from "fs";
 import os from "os";
 import { globSync } from 'glob';
-import core from "@actions/core";
+import * as core from "@actions/core";
 
 function _getMediaTelegramType(path) {
     const photoType = [

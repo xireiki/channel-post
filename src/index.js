@@ -163,13 +163,12 @@ const client = new postClient(bot_token, api_id, api_hash, large_file);
 			}
 		}
 
-		await saveSessionCache();
-
 	} catch (err) {
 		console.error("Error:", err.message);
 		process.exit(1);
 	} finally {
 		client.close();
+		await saveSessionCache();
 		console.log("Done");
 		process.exit();
 	}

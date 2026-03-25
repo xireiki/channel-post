@@ -3,22 +3,17 @@ import { postClient } from "./client.js";
 import { getFiles, getMediaTelegramType, setOutput } from "./utils.js";
 import * as cache from "@actions/cache";
 import fs from "fs";
-
+import { CACHE_PATH, CACHE_KEY } from "./types.js";
 const { bot_token, chat_id, context, path: filePath, parse_mode, method, large_file, api_id, api_hash, topic_id, cache_session, session } = getParams();
 
-// 缓存配置
-const CACHE_PATH = ["bot.session"];
-const CACHE_KEY = `session-${bot_token.split(":")[0]}`;
-
-// 缓存恢复函数
 async function restoreSessionCache() {
 	if (!cache_session) {
 		return;
 	}
 	if (session && session != "") {
-		fs.writeFileSync("bot.session", session);
+		fs.writeFileSync(CACHE_PATH[0], session);
 	}
-	if (fs.existsSync("bot.session")) {
+	if (fs.existsSync(CACHE_PATH[0])) {
 		return;
 	}
 	try {
@@ -33,12 +28,12 @@ async function restoreSessionCache() {
 }
 
 async function saveSessionCache() {
-	if (!cache_session || !fs.existsSync("bot.session")) {
+	if (!cache_session || !fs.existsSync(CACHE_PATH[0])) {
 		console.log("Session caching disabled or bot.session not found, skipping cache save");
 		return;
 	}
 	try {
-		if (fs.existsSync("bot.session")) {
+		if (fs.existsSync(CACHE_PATH[0])) {
 			console.log(`Saving cache with key: ${CACHE_KEY}`);
 			await cache.saveCache(CACHE_PATH, CACHE_KEY);
 			console.log("Cache saved successfully");
@@ -50,13 +45,10 @@ async function saveSessionCache() {
 
 const client = new postClient(bot_token, api_id, api_hash, large_file);
 
-// 主函数
 (async () => {
 	try {
-		// 恢复缓存
 		await restoreSessionCache();
 
-		// 初始化 client
 		await client.init();
 
 		if (method == "sendMessage") {

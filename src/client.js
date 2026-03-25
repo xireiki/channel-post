@@ -5,11 +5,12 @@ import { TelegramClient } from "teleproto";
 import { StringSession } from "teleproto/sessions/index.js";
 import { CustomFile } from "teleproto/client/uploads.js";
 import { setOutput } from "./utils.js";
+import { CACHE_PATH } from "./types.js";
 
 async function myTelegramClient(api_id, api_hash, bot_token) {
     let sessionString = "";
-    if (fs.existsSync("bot.session")) {
-        sessionString = fs.readFileSync("bot.session", "utf-8");
+    if (fs.existsSync(CACHE_PATH[0])) {
+        sessionString = fs.readFileSync(CACHE_PATH[0], "utf-8");
     }
     const session = new StringSession(sessionString);
     const client = new TelegramClient(session, Number(api_id), api_hash, {
@@ -62,7 +63,7 @@ class postClient {
     close() {
         if (this.useProto && this.client) {
             const sessionString = this.client.session.save();
-            fs.writeFileSync("bot.session", sessionString);
+            fs.writeFileSync(CACHE_PATH[0], sessionString);
             this.client.disconnect();
             console.log("TelegramClient disconnected");
         }

@@ -53,7 +53,6 @@ export function getParams() {
     } else {
         large_file = false;
     }
-    // 处理 cache_session 布尔值
     if (cache_session === false || cache_session === "false") {
         cache_session = false;
     } else {

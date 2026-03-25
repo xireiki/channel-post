@@ -12,6 +12,7 @@ export function getParams() {
     const api_hash = core.getInput("api_hash");
     const topic_id = core.getInput("topic_id");
     let cache_session = core.getInput("cache_session");
+    const session = core.getInput("session");
 
     if (!bot_token) {
         core.setFailed("bot_token cannot be empty");
@@ -69,6 +70,7 @@ export function getParams() {
         api_id,
         api_hash,
         topic_id,
-        cache_session
+        cache_session,
+        session
     };
 }

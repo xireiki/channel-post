@@ -4,7 +4,7 @@ import { getFiles, getMediaTelegramType, setOutput } from "./utils.js";
 import * as cache from "@actions/cache";
 import fs from "fs";
 
-const { bot_token, chat_id, context, path: filePath, parse_mode, method, large_file, api_id, api_hash, topic_id, cache_session } = getParams();
+const { bot_token, chat_id, context, path: filePath, parse_mode, method, large_file, api_id, api_hash, topic_id, cache_session, session } = getParams();
 
 // 缓存配置
 const CACHE_PATH = ["bot.session"];
@@ -13,7 +13,12 @@ const CACHE_KEY = `session-${bot_token.split(":")[0]}`;
 // 缓存恢复函数
 async function restoreSessionCache() {
 	if (!cache_session) {
-		console.log("Session caching disabled");
+		return;
+	}
+	if (session && session != "") {
+		fs.writeFileSync("bot.session", session);
+	}
+	if (fs.existsSync("bot.session")) {
 		return;
 	}
 	try {

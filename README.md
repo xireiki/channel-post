@@ -47,6 +47,9 @@ The following values are available:
 ### `cache_session`
 **Optional**: Save robot session files, default is false.
 
+### `session`
+**optional**: Session file content for TelegramClient.
+
 ## Outputs
 | Key | Description |
 | :----: | :----: |
@@ -56,7 +59,7 @@ The following values are available:
 ```yml
 steps:
   # examlple 1
-  - uses: xireiki/channel-post@v1
+  - uses: xireiki/channel-post@v2
     name: Post File
     with:
       bot_token: ${{ secrets.BOT_TOKEN }}
@@ -65,7 +68,7 @@ steps:
       path: example.zip
 
   # example 2
-  - uses: xireiki/channel-post@v1
+  - uses: xireiki/channel-post@v2
     name: Post File
     with:
       bot_token: ${{ secrets.BOT_TOKEN }}
@@ -76,7 +79,7 @@ steps:
       method: sendDocument
 
   # example 3
-  - uses: xireiki/channel-post@v1
+  - uses: xireiki/channel-post@v2
     name: Post Files
     with:
       bot_token: ${{ secrets.BOT_TOKEN }}
@@ -87,7 +90,7 @@ steps:
       method: sendFile
 
   # example 4
-  - uses: xireiki/channel-post@v1
+  - uses: xireiki/channel-post@v2
     name: Post MediaGroup
     with:
       bot_token: ${{ secrets.BOT_TOKEN }}
@@ -100,7 +103,7 @@ steps:
       method: sendMediaGroup
 
   # example 5
-  - uses: xireiki/channel-post@v1
+  - uses: xireiki/channel-post@v2
     name: Post Text
     with:
       bot_token: ${{ secrets.BOT_TOKEN }}
@@ -110,7 +113,7 @@ steps:
       method: sendMessage
 
   # example 6
-  - uses: xireiki/channel-post@v1
+  - uses: xireiki/channel-post@v2
     name: Test Post Large File
     with:
       bot_token: ${{ secrets.BOT_TOKEN }}
@@ -119,11 +122,8 @@ steps:
       method: sendFile # sendDocument、sendMediaGroup
       path: **/*.zip # Total size does not exceed 2000M
       large_file: true
-      api_id: ${{ secrets.API_ID }} # 12345678
-      api_hash: ${{ secrets.API_HASH }} # 01234567890abcdef01234567890abcdef
-      # api_server: https://example.com/telegram-bot-api_windows_x86
-      # api_server_file_name: telegram-bot-api.exe # default: telegram-bot-api
-      # run_cmd: '.\{fileName} --api-id={api_id} --api-hash={api_hash}'
+      api_id: ${{ secrets.API_ID }}
+      api_hash: ${{ secrets.API_HASH }}
 ```
 
 # Local operation

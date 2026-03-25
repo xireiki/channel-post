@@ -45,7 +45,10 @@ inputs:
     description: 'Enable session caching to avoid repeated logins'
     required: false
     default: true
-
+  session:
+    description: 'Session file content for TelegramClient'
+    required: false
+    default: ''
 outputs:
   msgId:
     description: "msgid of the sent message"

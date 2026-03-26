@@ -136,5 +136,5 @@ export INPUT_METHOD=sendFile # Required
 export INPUT_PARSE_MODE="None" # Required
 export INPUT_CONTEXT="An Example"
 export INPUT_PATH="./*.zip" # Total size cannot exceed 50M
-node channel-post/dist/bundle.js
+node channel-post/dist/index.js
 ```

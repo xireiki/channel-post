@@ -2,13 +2,13 @@
   "name": "channel-post",
   "version": "2.0.2",
   "description": "Telegram Chennel/Chat Post",
-  "main": "index.js",
+  "main": "dist/index.js",
   "target": "es2020",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "ncc build src/index.js -o dist",
-    "build:watch": "ncc build src/index.js -o dist --watch"
+    "build": "ncc build src/index.ts -o dist",
+    "build:watch": "ncc build src/index.ts -o dist --watch"
   },
   "author": "xireiki",
   "license": "GPL-3.0",
@@ -25,8 +25,11 @@
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@babel/preset-env": "^7.29.2",
+    "@types/glob": "^8.1.0",
+    "@types/node": "^25.5.0",
+    "@types/node-telegram-bot-api": "^0.64.14",
+    "@types/request": "^2.48.13",
     "babel-loader": "^10.1.1",
-    "webpack": "^5.105.4",
-    "webpack-cli": "^7.0.2"
+    "typescript": "^6.0.2"
   }
 }

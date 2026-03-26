@@ -26,7 +26,7 @@ jobs:
             echo -e "Channel-Post\n\nWorkflow: <a href=\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\">GitHub</a>\n\ncommit: ${{ github.event.head_commit.message }}"
             echo EOF
           } >> $GITHUB_OUTPUT
-          echo path="$GITHUB_WORKSPACE/dist/bundle.js" >> $GITHUB_OUTPUT
+          echo path="$GITHUB_WORKSPACE/dist/index.js" >> $GITHUB_OUTPUT
 
       - name: Test Post Document
         uses: ./

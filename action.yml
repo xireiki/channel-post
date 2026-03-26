@@ -55,4 +55,4 @@ outputs:
 
 runs:
   using: 'node20'
-  main: 'dist/bundle.js'
+  main: 'dist/index.js'

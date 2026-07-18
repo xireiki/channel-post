@@ -7,29 +7,30 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "ncc build src/index.ts -o dist",
-    "build:watch": "ncc build src/index.ts -o dist --watch"
+    "build": "npx ncc build src/index.ts -o dist",
+    "build:watch": "npx ncc build src/index.ts -o dist --watch"
   },
   "author": "xireiki",
   "license": "GPL-3.0",
   "dependencies": {
-    "@actions/cache": "^6.0.0",
-    "@actions/core": "^3.0.0",
-    "@actions/github": "^9.0.0",
-    "@vercel/ncc": "^0.38.4",
+    "@actions/cache": "^6.2.0",
+    "@actions/core": "^3.0.1",
+    "@actions/github": "^9.1.1",
+    "@vercel/ncc": "^0.44.1",
     "glob": "^13.0.6",
-    "node-telegram-bot-api": "^0.67.0",
+    "node-telegram-bot-api": "^1.2.0",
     "request": "^2.88.2",
-    "teleproto": "^1.223.2"
+    "teleproto": "^1.228.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.29.2",
-    "@types/glob": "^8.1.0",
-    "@types/node": "^25.5.0",
-    "@types/node-telegram-bot-api": "^0.64.14",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@types/glob": "^9.0.0",
+    "@types/node": "^26.1.1",
+    "@types/node-telegram-bot-api": "^0.64.15",
     "@types/request": "^2.48.13",
     "babel-loader": "^10.1.1",
-    "typescript": "^6.0.2"
+    "typescript": "^5.8.3",
+    "ncc": "^0.3.6"
   }
 }
